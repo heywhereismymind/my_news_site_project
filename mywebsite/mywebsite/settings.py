@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # SelfApps
-    'news.apps.MyWebsiteConfig',
+    'news.apps.NewsConfig',
 ]
 
 MIDDLEWARE = [
