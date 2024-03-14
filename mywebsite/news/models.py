@@ -15,5 +15,8 @@ class Article(models.Model):
     content = models.TextField()
     reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-publish']
+
     def __str__(self):
         return self.headline
