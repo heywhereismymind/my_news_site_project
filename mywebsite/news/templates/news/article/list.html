@@ -1,5 +1,7 @@
 {% extends "news/base.html" %}
+
 {% block title %}My News{% endblock%}
+
 {% block content %}
 <h1>My News</h1>
 {% for article in articles %}
@@ -8,7 +10,7 @@
 {{ article.headline }}
 </a>
 </h2>
-<p>
+<p class="pdate">
 Published {{ article.publish }} by {{ article.reporter}}
 </p>
 {{ article.content|truncatewords:30|linebreaks }}
