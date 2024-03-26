@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 class Article(models.Model):
     publish = models.DateField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
     headline = models.CharField(max_length=200)
     content = models.TextField()
     reporter = models.ForeignKey(User, on_delete=models.CASCADE,
