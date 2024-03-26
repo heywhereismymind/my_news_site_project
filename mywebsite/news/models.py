@@ -14,6 +14,14 @@ class Article(models.Model):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE,
                                  related_name='news_articles')
 
+    class Status(models.TextChoices):
+        DRAFT = 'DF', 'Draft'
+        PUBLISHED = 'PB', 'Published'
+
+    status = models.CharField(
+        max_length=2, choices=Status.choices, default=Status.DRAFT
+    )
+
     class Meta:
         ordering = ['-publish']
         indexes = [
