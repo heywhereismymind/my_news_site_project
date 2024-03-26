@@ -3,6 +3,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Article.Status.PUBLISHED)
+
+
 class Article(models.Model):
     publish = models.DateField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
