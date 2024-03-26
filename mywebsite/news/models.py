@@ -27,6 +27,9 @@ class Article(models.Model):
         max_length=2, choices=Status.choices, default=Status.DRAFT
     )
 
+    objects = models.Manager()
+    published = PublishedManager()
+
     class Meta:
         ordering = ['-publish']
         indexes = [
