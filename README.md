@@ -1,1 +1,3 @@
-https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjNvdm1sMzNiM2NheXFqM2R2MTc2MzZvbndmZWd0cmx5and0MHc4ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/M9gbBd9nbDrOTu1Mqx/giphy.gif
+<div id="header" align="center">
+  <img src="https://media.giphy.com/media/M9gbBd9nbDrOTu1Mqx/giphy.gif" width="100"/>
+</div>
