@@ -1,9 +1,9 @@
 {% extends "news/base.html" %}
 {% block title %} {{ article.headline }} {% endblock %}
 {% block content %}
-<h1>{{ article.headline }}</h1>
-<p class="pdate">
-Published {{ article.publish }} by {{ article.reporter }}
-</p>
-{{ article.content }}
+    <h1>{{ article.headline }}</h1>
+    <p class="pdate">
+        Published {{ article.publish }} by {{ article.reporter }}
+    </p>
+    {{ article.content }}
 {% endblock %}
