@@ -6,4 +6,9 @@
         Published {{ article.publish }} by {{ article.reporter }}
     </p>
     {{ article.content }}
+
+
+<a href="{% url 'news:article_share' article.id %}">
+    Share this news!
+</a>
 {% endblock %}
