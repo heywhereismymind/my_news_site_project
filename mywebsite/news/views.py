@@ -23,13 +23,14 @@ def article_share(request, article_id):
 
             message = (
                 f"Read {article.headline} at {article_url}\n\n"
-                f"{cd['name']}'s comments: {cd['comments']}"
+                f"{cd['name']}'s comments: {cd['comment']}"
             )
 
-            send_mail(subject, message, EMAIL_HOST_USER, cd["to"])
+            send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
             sent = True
     else:
         form = EmailPostForm()
+
     return render(
         request, "news/article/share.html", {"article": article, "form": form}
     )
