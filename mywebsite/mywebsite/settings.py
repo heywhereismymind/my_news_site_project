@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import configparser
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -125,3 +127,13 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+conf = configparser.ConfigParser()
+conf.read(f"{BASE_DIR}/config.cfg")
+
+EMAIL_HOST = conf["gmail"]["EMAIL_HOST"]
+EMAIL_PORT = conf["gmail"]["EMAIL_PORT"]
+EMAIL_HOST_USER = conf["gmail"]["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = conf["gmail"]["EMAIL_HOST_PASSWORD"]
+EMAIL_USE_TLS = conf["gmail"]["EMAIL_USE_TLS"]
