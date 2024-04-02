@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
 
 from .models import Article
 
@@ -17,16 +18,12 @@ def article_detail(request, year, month, day, article_slg):
     return render(request, 'news/article/detail.html', {'article': article})
 
 
-def article_list(request):
-    articles = Article.published.all()
+class ArticleListView(ListView):
+    """
+    View to display
+    """
 
-    paginator = Paginator(articles, 2)
-    page_number = request.GET.get('page', 1)
-    try:
-        articles = paginator.get_page(page_number)
-    except EmptyPage:
-        articles = paginator.page(paginator.num_pages)
-    except PageNotAnInteger:
-        articles = paginator.page(1)
-
-    return render(request, 'news/article/list.html', {'articles': articles})
+    queryset = Article.published.all()
+    context_object_name = 'articles'
+    paginate_by = 2
+    template_name = 'news/article/list.html'
