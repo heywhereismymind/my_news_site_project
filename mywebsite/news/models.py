@@ -15,14 +15,15 @@ class Article(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     headline = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=250, unique_for_date='publish')
+    slug = models.SlugField(max_length=250, unique_for_date="publish")
     content = models.TextField()
-    reporter = models.ForeignKey(User, on_delete=models.CASCADE,
-                                 related_name='news_articles')
+    reporter = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="news_articles"
+    )
 
     class Status(models.TextChoices):
-        DRAFT = 'DF', 'Draft'
-        PUBLISHED = 'PB', 'Published'
+        DRAFT = "DF", "Draft"
+        PUBLISHED = "PB", "Published"
 
     status = models.CharField(
         max_length=2, choices=Status.choices, default=Status.DRAFT
@@ -32,10 +33,8 @@ class Article(models.Model):
     published = PublishedManager()
 
     class Meta:
-        ordering = ['-publish']
-        indexes = [
-            models.Index(fields=['-publish'])
-        ]
+        ordering = ["-publish"]
+        indexes = [models.Index(fields=["-publish"])]
 
     def get_absolute_url(self):
         return reverse(

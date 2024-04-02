@@ -7,16 +7,16 @@ from .models import Article
 
 
 def article_share(request, article_id):
-    article = get_object_or_404(Article, id=article_id,
-                                status=Article.Status.PUBLISHED)
-    if request.method == 'POST':
+    article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
+    if request.method == "POST":
         form = EmailPostForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
     else:
         form = EmailPostForm()
     return render(
-            request, 'news/article/share.html', {'article': article, 'form': form})
+        request, "news/article/share.html", {"article": article, "form": form}
+    )
 
 
 def article_detail(request, year, month, day, article_slg):
@@ -28,7 +28,7 @@ def article_detail(request, year, month, day, article_slg):
         publish__month=month,
         publish__day=day,
     )
-    return render(request, 'news/article/detail.html', {'article': article})
+    return render(request, "news/article/detail.html", {"article": article})
 
 
 class ArticleListView(ListView):
@@ -37,6 +37,6 @@ class ArticleListView(ListView):
     """
 
     queryset = Article.published.all()
-    context_object_name = 'articles'
+    context_object_name = "articles"
     paginate_by = 2
-    template_name = 'news/article/list.html'
+    template_name = "news/article/list.html"
