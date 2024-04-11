@@ -4,7 +4,6 @@ from . import views
 
 app_name = "news"
 urlpatterns = [
-    # path('', views.article_list, name='article_list'),
     path("", views.ArticleListView.as_view(), name="article_list"),
     path(
         "<int:year>/<int:month>/<int:day>/<slug:article_slg>",
@@ -12,4 +11,5 @@ urlpatterns = [
         name="article_detail",
     ),
     path("<int:article_id>/share", views.article_share, name="article_share"),
+    path("<int:article_id>/comment/", views.article_comment, name="article_comment"),
 ]
