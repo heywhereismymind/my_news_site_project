@@ -1,9 +1,12 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from django.core.mail import send_mail
-# from mywebsite.settings import EMAIL_HOST_USER
+from taggit.models import Tag
+
+from mywebsite.settings import EMAIL_HOST_USER
 
 from .models import Article, Comment
 from .forms import EmailPostForm, CommentForm
@@ -27,7 +30,7 @@ def article_share(request, article_id):
                 f"{cd['name']}'s comments: {cd['comment']}"
             )
 
-            # send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
+            send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
             sent = True
     else:
         form = EmailPostForm()
@@ -56,15 +59,26 @@ def article_detail(request, year, month, day, article_slg):
                   {"article": article, "comments": comments, "form": form})
 
 
-class ArticleListView(ListView):
-    """
-    View to display
-    """
+def article_list(request, tag_slug=None):
+    article_list = Article.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        article_list = article_list.filter(tags__in=[tag])
 
-    queryset = Article.published.all()
-    context_object_name = "articles"
-    paginate_by = 2
-    template_name = "news/article/list.html"
+    paginator = Paginator(article_list, 2)
+    page_number = request.GET.get('page', 1)
+
+    try:
+        articles = paginator.page(page_number)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
+
+    return render(request, "news/article/list.html",
+                  {"articles": articles,
+                   "tag": tag})
 
 
 @require_POST
