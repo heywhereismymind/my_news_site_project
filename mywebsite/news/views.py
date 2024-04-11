@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from django.core.mail import send_mail
 # from mywebsite.settings import EMAIL_HOST_USER
@@ -58,3 +59,20 @@ class ArticleListView(ListView):
     context_object_name = "articles"
     paginate_by = 2
     template_name = "news/article/list.html"
+
+
+@require_POST
+def article_comment(request, article_id):
+    article = get_object_or_404(Article, id=article_id,
+                                status=Article.Status.PUBLISHED)
+    comment = None
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.article = article
+        comment.save()
+    return render(
+        request,
+        "news/article/comment.html",
+        {"article": article, "form": form, "comment": comment},
+    )
