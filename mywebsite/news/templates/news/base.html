@@ -25,6 +25,8 @@
             <li>
                 <p>Articles was published - {% total_articles %}</p>
             </li>
+            <h3>Latest articles</h3>
+            {% show_latest_articles 2 %}
 
             <a href="{% url 'news:article_list' %}">
                 Home
