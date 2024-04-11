@@ -1,4 +1,5 @@
 {% load static %}
+{% load news_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,9 @@
             <h2>Navigation bar</h2>
             <li>
                 <p>This is my news site</p>
+            </li>
+            <li>
+                <p>Articles was published - {% total_articles %}</p>
             </li>
 
             <a href="{% url 'news:article_list' %}">
