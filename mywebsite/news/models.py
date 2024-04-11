@@ -55,7 +55,8 @@ class Article(models.Model):
 
 class Comment(models.Model):
     article = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name="comments")
+        Article, on_delete=models.CASCADE, related_name="comments"
+    )
     name = models.CharField(max_length=80)
     email = models.EmailField()
     body = models.TextField()
@@ -65,7 +66,9 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ["created"]
-        indexes = [models.Index(fields=["created"]),]
+        indexes = [
+            models.Index(fields=["created"]),
+        ]
 
     def __str__(self):
         return f"Comment by {self.name} on {self.article}"

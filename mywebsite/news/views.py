@@ -36,8 +36,9 @@ def article_share(request, article_id):
         form = EmailPostForm()
 
     return render(
-        request, "news/article/share.html",
-        {"article": article, "form": form, 'sent': sent}
+        request,
+        "news/article/share.html",
+        {"article": article, "form": form, "sent": sent},
     )
 
 
@@ -54,9 +55,11 @@ def article_detail(request, year, month, day, article_slg):
     comments = article.comments.filter(active=True)
     form = CommentForm()
 
-    return render(request,
-                  "news/article/detail.html",
-                  {"article": article, "comments": comments, "form": form})
+    return render(
+        request,
+        "news/article/detail.html",
+        {"article": article, "comments": comments, "form": form},
+    )
 
 
 def article_list(request, tag_slug=None):
@@ -67,7 +70,7 @@ def article_list(request, tag_slug=None):
         article_list = article_list.filter(tags__in=[tag])
 
     paginator = Paginator(article_list, 2)
-    page_number = request.GET.get('page', 1)
+    page_number = request.GET.get("page", 1)
 
     try:
         articles = paginator.page(page_number)
@@ -76,15 +79,12 @@ def article_list(request, tag_slug=None):
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
 
-    return render(request, "news/article/list.html",
-                  {"articles": articles,
-                   "tag": tag})
+    return render(request, "news/article/list.html", {"articles": articles, "tag": tag})
 
 
 @require_POST
 def article_comment(request, article_id):
-    article = get_object_or_404(Article, id=article_id,
-                                status=Article.Status.PUBLISHED)
+    article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
     comment = None
     form = CommentForm(data=request.POST)
     if form.is_valid():
