@@ -5,8 +5,9 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from django.core.mail import send_mail
 from taggit.models import Tag
+from django.db.models import Count
 
-from mywebsite.settings import EMAIL_HOST_USER
+# from mywebsite.settings import EMAIL_HOST_USER
 
 from .models import Article, Comment
 from .forms import EmailPostForm, CommentForm
@@ -30,7 +31,7 @@ def article_share(request, article_id):
                 f"{cd['name']}'s comments: {cd['comment']}"
             )
 
-            send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
+            # send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
             sent = True
     else:
         form = EmailPostForm()
@@ -55,10 +56,20 @@ def article_detail(request, year, month, day, article_slg):
     comments = article.comments.filter(active=True)
     form = CommentForm()
 
+    article_tags_ids = article.tags.values_list("id", flat=True)
+    similar_articles = Article.published.filter(tags__in=Count("tags")).order_by(
+        "-same_tags", "-publish"
+    )[:2]
+
     return render(
         request,
         "news/article/detail.html",
-        {"article": article, "comments": comments, "form": form},
+        {
+            "article": article,
+            "comments": comments,
+            "form": form,
+            "similar_articles": similar_articles,
+        },
     )
 
 
