@@ -2,34 +2,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{% block title %}{% endblock %}</title>
-     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h2>News site</h2>
-    </header>
-    <section>
-        <article>
-            {% block content %}
-            {% endblock %}
-        </article>
+<header>
+    <h2>News site</h2>
+</header>
+<section>
+    <article>
+        {% block content %}
+        {% endblock %}
+    </article>
 
-        <nav>
-            <ul>
-                <h2>Navigation bar</h2>
-                <li>
-                    <p>This is my news site</p>
-                </li>
+    <nav>
+        <ul>
+            <h2>Navigation bar</h2>
+            <li>
+                <p>This is my news site</p>
+            </li>
 
-                <a href="{% url 'news:article_list' %}">
-                    Home
-                </a>
-            </ul>
-        </nav>
-    </section>
+            <a href="{% url 'news:article_list' %}">
+                Home
+            </a>
+        </ul>
+    </nav>
+</section>
 
-    <footer>
-        Footer
-    </footer>
+<footer>
+    Footer
+</footer>
 </body>
