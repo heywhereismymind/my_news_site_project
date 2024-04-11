@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
-from .forms import EmailPostForm
 from django.core.mail import send_mail
-from mywebsite.settings import EMAIL_HOST_USER
+# from mywebsite.settings import EMAIL_HOST_USER
 
-from .models import Article
+from .models import Article, Comment
+from .forms import EmailPostForm, CommentForm
 
 
 def article_share(request, article_id):
@@ -26,13 +26,14 @@ def article_share(request, article_id):
                 f"{cd['name']}'s comments: {cd['comment']}"
             )
 
-            send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
+            # send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
             sent = True
     else:
         form = EmailPostForm()
 
     return render(
-        request, "news/article/share.html", {"article": article, "form": form}
+        request, "news/article/share.html",
+        {"article": article, "form": form, 'sent': sent}
     )
 
 
