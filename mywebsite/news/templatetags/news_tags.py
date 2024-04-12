@@ -1,10 +1,17 @@
+import markdown
 from django import template
 from django.db.models import Count
+from django.utils.safestring import mark_safe
 
 from ..models import Article
 
 
 register = template.Library()
+
+
+@register.filter(name="markdown")
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))
 
 
 @register.simple_tag

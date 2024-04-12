@@ -27,8 +27,16 @@
             </li>
             <h3>Latest articles</h3>
             {% show_latest_articles 2 %}
+            <hr>
+            {% get_most_commented_articles as most_commented_articles %}
+            <p>Most commented articles</p>
+            {% for article in most_commented_articles %}
+            <li>
+                <a href="{{ article.get_absolute_url }}">{{ article.headline }}</a>
+            </li>
+            {% endfor %}
 
-
+            <hr>
             <a href="{% url 'news:article_list' %}">
                 Home
             </a>
