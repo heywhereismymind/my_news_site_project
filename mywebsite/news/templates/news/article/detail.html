@@ -1,11 +1,13 @@
 {% extends "news/base.html" %}
+{% load news_tags %}
+
 {% block title %} {{ article.headline }} {% endblock %}
 {% block content %}
     <h1>{{ article.headline }}</h1>
     <p class="pdate">
         Published {{ article.publish }} by {{ article.reporter }}
     </p>
-    {{ article.content }}
+    {{ article.content|markdown }}
 
 
     <a href="{% url 'news:article_share' article.id %}">
@@ -14,11 +16,11 @@
 
     <h2>Similar articles</h2>
     {% for article in similar_articles %}
-    <p>
-        <a href="{{ article.get_absolute_url }}">{{ article.headline }}</a>
-    </p>
-    {% empty %}
-    There are no similar articles.
+        <p>
+            <a href="{{ article.get_absolute_url }}">{{ article.headline }}</a>
+        </p>
+        {% empty %}
+        There are no similar articles.
     {% endfor %}
 
     {% with comments.count as total_comments %}
