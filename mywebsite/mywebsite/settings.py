@@ -141,3 +141,5 @@ EMAIL_PORT = conf["gmail"]["EMAIL_PORT"]
 EMAIL_HOST_USER = conf["gmail"]["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = conf["gmail"]["EMAIL_HOST_PASSWORD"]
 EMAIL_USE_TLS = conf["gmail"]["EMAIL_USE_TLS"]
+
+SITE_ID = 1
