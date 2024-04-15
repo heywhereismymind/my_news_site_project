@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from .models import Article
 
 
-class LatestArticleFeed(Feed):
+class LatestArticlesFeed(Feed):
     title = "My news"
     link = reverse_lazy("news:article_list")
     description = "New articles of my news site."
