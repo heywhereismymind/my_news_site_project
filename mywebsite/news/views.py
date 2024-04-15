@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
 
-# from mywebsite.settings import EMAIL_HOST_USER
+from mywebsite.settings import EMAIL_HOST_USER
 
 from .models import Article, Comment
 from .forms import EmailPostForm, CommentForm
@@ -31,7 +31,7 @@ def article_share(request, article_id):
                 f"{cd['name']}'s comments: {cd['comment']}"
             )
 
-            # send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
+            send_mail(subject, message, EMAIL_HOST_USER, [cd["to"]])
             sent = True
     else:
         form = EmailPostForm()
