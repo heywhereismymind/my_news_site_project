@@ -1,4 +1,4 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -127,10 +127,13 @@ def article_search(request):
             search_vector = SearchVector("headline", "content", config="russian")
             search_query = SearchQuery(query, config="russian")
 
-            results = Article.published.annotate(
-                search=SearchVector("headline", "content"),
-                rank= SearchRank(search_vector, search_query),
-            ).filter(search=search_query).order_by("-rank")
+            results = (
+                Article.published.annotate(
+                    similarity=TrigramSimilarity("headline", query),
+                )
+                .filter(similarity__lte=0.1)
+                .order_by("-similarity")
+            )
 
     return render(
         request,
