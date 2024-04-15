@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -10,7 +11,7 @@ from django.db.models import Count
 from mywebsite.settings import EMAIL_HOST_USER
 
 from .models import Article, Comment
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SearchForm
 
 
 def article_share(request, article_id):
@@ -110,3 +111,24 @@ def article_comment(request, article_id):
         "news/article/comment.html",
         {"article": article, "form": form, "comment": comment},
     )
+
+
+def article_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+
+    if "query" in request.GET:
+        form = SearchForm(request.GET)
+
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            results = Article.published.annotate(
+                search=SearchVector("headline", "content"),
+            ).filter(search=query)
+
+        return render(
+            request,
+            "news/article/search.html",
+            {"form": form, "query": query, "results": results},
+        )
