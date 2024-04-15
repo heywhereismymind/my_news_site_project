@@ -14,5 +14,5 @@ urlpatterns = [
     path("<int:article_id>/share", views.article_share, name="article_share"),
     path("<int:article_id>/comment/", views.article_comment, name="article_comment"),
     path("tag/<slug:tag_slug>", views.article_list, name="article_list_by_tag"),
-    path("feed/", LatestArticlesFeed(), name="articles_feed"),
+    path("feed/", LatestArticlesFeed(), name="article_feed"),
 ]
