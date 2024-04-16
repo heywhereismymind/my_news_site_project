@@ -7,6 +7,7 @@ from django.views.generic import ListView
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
+from django.contrib import messages
 
 from mywebsite.settings import EMAIL_HOST_USER
 
@@ -65,6 +66,8 @@ def article_detail(request, year, month, day, article_slg):
         "-same_tags", "-publish"
     )[:2]
 
+    messages.success(request, "article_detail loaded successfully")
+
     return render(
         request,
         "news/article/detail.html",
@@ -93,6 +96,8 @@ def article_list(request, tag_slug=None):
         articles = paginator.page(1)
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
+    else:
+        messages.success(request, "article_list loaded successfully")
 
     return render(request, "news/article/list.html", {"articles": articles, "tag": tag})
 
@@ -106,6 +111,9 @@ def article_comment(request, article_id):
         comment = form.save(commit=False)
         comment.article = article
         comment.save()
+
+        messages.success(request, "article_comment loaded successfully")
+
     return render(
         request,
         "news/article/comment.html",
