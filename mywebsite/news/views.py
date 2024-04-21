@@ -77,6 +77,7 @@ def article_detail(request, year, month, day, article_slg):
     messages.success(request, "article_detail loaded successfully")
 
     total_views = r.incr(f"article:{article.id}:views")
+    r.zincrby("article_ranks", 1, article.id)
 
     return render(
         request,
@@ -129,6 +130,21 @@ def article_comment(request, article_id):
         request,
         "news/article/comment.html",
         {"article": article, "form": form, "comment": comment},
+    )
+
+
+def article_ranks(request):
+    article_ranks = r.zrange("article-ranks", 0, -1, desc=True)[:5]
+
+    article_ranks_ids = [int(id) for id in article_ranks]
+
+    most_read_news = list(Article.objects.filter(id__in=article_ranks_ids))
+    most_read_news.sort(key=lambda x: article_ranks_ids.index(x.id))
+
+    return render(
+        request,
+        "news/article/ranks.html",
+        {"most_read_news": most_read_news},
     )
 
 
