@@ -16,4 +16,5 @@ urlpatterns = [
     path("tag/<slug:tag_slug>", views.article_list, name="article_list_by_tag"),
     path("feed/", LatestArticlesFeed(), name="article_feed"),
     path("search/", views.article_search, name="article_search"),
+    path("ranks/", views.article_ranks, name="article_ranks"),
 ]
