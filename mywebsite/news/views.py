@@ -14,6 +14,14 @@ from mywebsite.settings import EMAIL_HOST_USER
 from .models import Article, Comment
 from .forms import EmailPostForm, CommentForm, SearchForm
 
+import redis
+from django.conf import settings
+
+
+r = redis.Redis(host=settings.REDIS_HOST,
+                port=settings.REDIS_PORT,
+                db=settings.REDIS_DB)
+
 
 def article_share(request, article_id):
     article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
