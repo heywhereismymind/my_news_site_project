@@ -76,6 +76,8 @@ def article_detail(request, year, month, day, article_slg):
 
     messages.success(request, "article_detail loaded successfully")
 
+    total_views = r.incr(f"article:{article.id}:views")
+
     return render(
         request,
         "news/article/detail.html",
@@ -84,6 +86,7 @@ def article_detail(request, year, month, day, article_slg):
             "comments": comments,
             "form": form,
             "similar_articles": similar_articles,
+            "total_views": total_views,
         },
     )
 
