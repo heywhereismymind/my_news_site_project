@@ -7,7 +7,7 @@
 <p>Please, use the following form to log-in:</p>
 
 <form method="post">
-    {{ forms.as_p }}
+    {{ form.as_p }}
     {% csrf_token %}
 
     <div class="mb-3">
@@ -15,3 +15,4 @@
     </div>
 
 </form>
+{% endblock %}
