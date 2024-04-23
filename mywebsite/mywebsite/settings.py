@@ -37,11 +37,16 @@ ALLOWED_HOSTS = [
 
 INTERNAL_IPS = ["127.0.0.1"]
 
+LOGIN_REDIRECT_URL = "news"
+LOGIN_URL = "news:login"
+LOGOUT_URL = "news:logout"
+
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "news.apps.NewsConfig",
     "django.contrib.auth",
+    "django.contrib.admin",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -52,8 +57,6 @@ INSTALLED_APPS = [
     # InstalledApps
     "taggit",
     "debug_toolbar",
-    # SelfApps
-    "news.apps.NewsConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,26 @@
+{% extends "news/base.html" %}
+
+{% block title %}Log-in{% endblock %}
+
+{% block content %}
+<h1>Log-in</h1>
+{% if form.errors %}
+<p>
+    Your username and password didn't match.
+    Please try again.
+</p>
+{% else %}
+<p>Please< use the following form to log-in:</p>
+{% endif %}
+
+<form action="{% url 'news:login' %}" method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary" value="Log-in">Log-in</button>
+    </div>
+</form>
+
+{% endblock %}

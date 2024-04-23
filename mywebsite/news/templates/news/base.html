@@ -31,7 +31,24 @@
         {% block content %}
         {% endblock %}
     </article>
-
+    <div class="container-fluid">
+        <ul>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'news:article_search' %}">Search</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'news:article_ranks' %}">NEws ranks</a>
+            </li>
+        </ul>
+        <span>
+            {% if request.user.is_authenticated %}
+            <p>Hello {{ request.user.first_name|default:request.user.username }},</p>
+            <a href="{% url 'news:logout' %}">Logout</a>
+            {% else %}
+            <a href="{% url 'news:login' %}">Log-in</a>
+            {% endif %}
+        </span>
+    </div>
     <nav>
         <ul>
             <h2>Navigation bar</h2>
@@ -76,7 +93,7 @@
         </a>
     </div>
     <br>
-    <div class="text-center p-4" style="background-color: rgba(0,0,0,0.0.05);">
+    <div class="text-center p-4" style="background-color: rgba(0,0,0,0.005);">
         ™ 2024 Copyright: News site
     </div>
 </footer>

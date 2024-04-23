@@ -9,7 +9,7 @@ sitemaps = {
     "static": ArticleSitemap,
 }
 
-app_name = "news"
+app_name = 'news'
 urlpatterns = [
     path("", views.article_list, name="article_list"),
     path(
@@ -30,9 +30,5 @@ urlpatterns = [
         name="django.contrib.sitemaps.views.sitemap",
     ),
     path("login/", auth_views.LoginView.as_view(), name="login"),
-    path(
-        "logout",
-        auth_views.LogoutView.as_view(),
-        name="logout",
-    )
+    path("logout/", auth_views.LogoutView.as_view(), name="logout",),
 ]
