@@ -1,22 +1,20 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_POST
-from django.views.generic import ListView
-from django.core.mail import send_mail
-from taggit.models import Tag
-from django.db.models import Count
-from django.contrib import messages
-
-from mywebsite.settings import EMAIL_HOST_USER
-
-from .models import Article, Comment
-from .forms import EmailPostForm, CommentForm, SearchForm
-
 import redis
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.views.decorators.http import require_POST
+from taggit.models import Tag
 
+from mywebsite.settings import EMAIL_HOST_USER
+from .forms import EmailPostForm, CommentForm, SearchForm, LoginForm
+from .models import Article
 
 r = redis.Redis(host=settings.REDIS_HOST,
                 port=settings.REDIS_PORT,
@@ -175,3 +173,24 @@ def article_search(request):
         "news/article/search.html",
         {"form": form, "query": query, "results": results},
     )
+
+
+def login_user(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(
+                request, username=cd["username"], password=cd["password"]
+            )
+            if user:
+                login(request, user)
+                return HttpResponse("Auth successfully")
+            else:
+                return HttpResponse("Disable account")
+        else:
+            return HttpResponse("Invalid login")
+    else:
+        form = LoginForm()
+
+    return render(request, "news/login.html", {"form": form})
