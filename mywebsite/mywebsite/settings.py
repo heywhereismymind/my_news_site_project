@@ -104,13 +104,13 @@ PSQL_HOST = conf["postgre"]["HOST"]
 PSQL_PORT = conf["postgre"]["PORT"]
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': PSQL_NAME,
-        'USER': PSQL_USER,
-        'PASSWORD': PSQL_PASSWORD,
-        'HOST': PSQL_HOST,
-        'PORT': PSQL_PORT,
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": PSQL_NAME,
+        "USER": PSQL_USER,
+        "PASSWORD": PSQL_PASSWORD,
+        "HOST": PSQL_HOST,
+        "PORT": PSQL_PORT,
     }
 }
 

@@ -4,9 +4,7 @@ from django.urls import path, include
 
 from news.sitemaps import ArticleSitemap
 
-sitemaps = {
-    "articles": ArticleSitemap
-}
+sitemaps = {"articles": ArticleSitemap}
 
 
 urlpatterns = [
