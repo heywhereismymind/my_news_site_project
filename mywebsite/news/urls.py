@@ -9,7 +9,7 @@ sitemaps = {
     "static": ArticleSitemap,
 }
 
-app_name = 'news'
+app_name = "news"
 urlpatterns = [
     path("", views.article_list, name="article_list"),
     path(
