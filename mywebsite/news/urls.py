@@ -5,7 +5,7 @@ from .feeds import LatestArticlesFeed
 from .sitemaps import ArticleSitemap
 
 sitemaps = {
-    'static': ArticleSitemap,
+    "static": ArticleSitemap,
 }
 
 app_name = "news"
@@ -22,5 +22,11 @@ urlpatterns = [
     path("feed/", LatestArticlesFeed(), name="article_feed"),
     path("search/", views.article_search, name="article_search"),
     path("ranks/", views.article_ranks, name="article_ranks"),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    path("login/", views.login_user, name="login"),
 ]

@@ -16,9 +16,9 @@ from mywebsite.settings import EMAIL_HOST_USER
 from .forms import EmailPostForm, CommentForm, SearchForm, LoginForm
 from .models import Article
 
-r = redis.Redis(host=settings.REDIS_HOST,
-                port=settings.REDIS_PORT,
-                db=settings.REDIS_DB)
+r = redis.Redis(
+    host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB
+)
 
 
 def article_share(request, article_id):
