@@ -1,7 +1,12 @@
 from django.urls import path
 from . import views
+from django.contrib.sitemaps.views import sitemap
 from .feeds import LatestArticlesFeed
+from .sitemaps import ArticleSitemap
 
+sitemaps = {
+    'static': ArticleSitemap,
+}
 
 app_name = "news"
 urlpatterns = [
@@ -17,4 +22,5 @@ urlpatterns = [
     path("feed/", LatestArticlesFeed(), name="article_feed"),
     path("search/", views.article_search, name="article_search"),
     path("ranks/", views.article_ranks, name="article_ranks"),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
