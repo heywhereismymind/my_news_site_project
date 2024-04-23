@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # InstalledApps
     "taggit",
     "debug_toolbar",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,13 @@ DATABASES = {
         "PORT": PSQL_PORT,
     }
 }
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+    ]
+}
+
 
 
 # Password validation
