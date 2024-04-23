@@ -1,0 +1,15 @@
+{% extends "news/base.html" %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+<h1>Logout</h1>
+<p>
+    You have been successfully logged out.
+    You can
+    <a data-mdb-ripple-init class="btn btn-primary" role="button"
+       href="{% url 'news:login' %}">
+        <i class="fa fa-rss" aria-hidden="true">Log-in again</i>
+    </a>
+</p>
+{% endblock %}

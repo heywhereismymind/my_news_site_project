@@ -1,9 +1,8 @@
 import redis
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
@@ -13,7 +12,7 @@ from django.views.decorators.http import require_POST
 from taggit.models import Tag
 
 from mywebsite.settings import EMAIL_HOST_USER
-from .forms import EmailPostForm, CommentForm, SearchForm, LoginForm
+from .forms import EmailPostForm, CommentForm, SearchForm
 from .models import Article
 
 r = redis.Redis(
@@ -21,6 +20,7 @@ r = redis.Redis(
 )
 
 
+@login_required
 def article_share(request, article_id):
     article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
     sent = False
@@ -51,6 +51,7 @@ def article_share(request, article_id):
     )
 
 
+@login_required
 def article_detail(request, year, month, day, article_slg):
     article = get_object_or_404(
         Article,
@@ -90,6 +91,7 @@ def article_detail(request, year, month, day, article_slg):
     )
 
 
+@login_required
 def article_list(request, tag_slug=None):
     article_list = Article.published.all()
     tag = None
@@ -112,6 +114,7 @@ def article_list(request, tag_slug=None):
     return render(request, "news/article/list.html", {"articles": articles, "tag": tag})
 
 
+@login_required
 @require_POST
 def article_comment(request, article_id):
     article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
@@ -131,6 +134,7 @@ def article_comment(request, article_id):
     )
 
 
+@login_required
 def article_ranks(request):
     article_ranks = r.zrange("article_ranks", 0, -1, desc=True)[:5]
 
@@ -146,6 +150,7 @@ def article_ranks(request):
     )
 
 
+@login_required
 def article_search(request):
     form = SearchForm()
     query = None
@@ -173,24 +178,3 @@ def article_search(request):
         "news/article/search.html",
         {"form": form, "query": query, "results": results},
     )
-
-
-def login_user(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(
-                request, username=cd["username"], password=cd["password"]
-            )
-            if user:
-                login(request, user)
-                return HttpResponse("Auth successfully")
-            else:
-                return HttpResponse("Disable account")
-        else:
-            return HttpResponse("Invalid login")
-    else:
-        form = LoginForm()
-
-    return render(request, "news/login.html", {"form": form})
