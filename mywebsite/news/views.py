@@ -11,7 +11,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 
-from mywebsite.settings import EMAIL_HOST_USER
+from mywebsite.settings.base import EMAIL_HOST_USER
 from .forms import EmailPostForm, CommentForm, SearchForm
 from .models import Article
 

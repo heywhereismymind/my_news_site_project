@@ -15,7 +15,7 @@ import configparser
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 conf = configparser.ConfigParser()
@@ -29,7 +29,7 @@ conf.read(f"{BASE_DIR}/config.cfg")
 SECRET_KEY = "django-insecure-2)%l#re@q@f+e8_in*dufoqq2z)sayx_cn%&*0))s#p4ge&0n-"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = [
     "*",
@@ -107,16 +107,6 @@ PSQL_PASSWORD = conf["postgre"]["PASSWORD"]
 PSQL_HOST = conf["postgre"]["HOST"]
 PSQL_PORT = conf["postgre"]["PORT"]
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": PSQL_NAME,
-        "USER": PSQL_USER,
-        "PASSWORD": PSQL_PASSWORD,
-        "HOST": PSQL_HOST,
-        "PORT": PSQL_PORT,
-    }
-}
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
