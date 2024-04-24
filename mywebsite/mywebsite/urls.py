@@ -14,7 +14,7 @@ urlpatterns = [
         "sitemap.xml",
         sitemap,
         {"sitemaps": sitemaps},
-        name="django.contrib.sitemaps.views.sitemap",
+        name="sitemap",
     ),
     path("__debug__/", include("debug_toolbar.urls")),
     path("api/", include("news.api.urls", namespace="api")),
