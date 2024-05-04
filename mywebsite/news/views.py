@@ -1,20 +1,26 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_POST
-from django.views.generic import ListView
-from django.core.mail import send_mail
-from taggit.models import Tag
-from django.db.models import Count
+import redis
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity
+from django.core.mail import send_mail
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.views.decorators.http import require_POST
+from taggit.models import Tag
 
-from mywebsite.settings import EMAIL_HOST_USER
-
-from .models import Article, Comment
+from mywebsite.settings.base import EMAIL_HOST_USER
 from .forms import EmailPostForm, CommentForm, SearchForm
+from .models import Article
+
+r = redis.Redis(
+    host="cache", port=6379, db=0
+)
 
 
+@login_required
 def article_share(request, article_id):
     article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
     sent = False
@@ -45,6 +51,7 @@ def article_share(request, article_id):
     )
 
 
+@login_required
 def article_detail(request, year, month, day, article_slg):
     article = get_object_or_404(
         Article,
@@ -68,6 +75,9 @@ def article_detail(request, year, month, day, article_slg):
 
     messages.success(request, "article_detail loaded successfully")
 
+    total_views = r.incr(f"article:{article.id}:views")
+    r.zincrby("article_ranks", 1, article.id)
+
     return render(
         request,
         "news/article/detail.html",
@@ -76,10 +86,12 @@ def article_detail(request, year, month, day, article_slg):
             "comments": comments,
             "form": form,
             "similar_articles": similar_articles,
+            "total_views": total_views,
         },
     )
 
 
+@login_required
 def article_list(request, tag_slug=None):
     article_list = Article.published.all()
     tag = None
@@ -102,6 +114,7 @@ def article_list(request, tag_slug=None):
     return render(request, "news/article/list.html", {"articles": articles, "tag": tag})
 
 
+@login_required
 @require_POST
 def article_comment(request, article_id):
     article = get_object_or_404(Article, id=article_id, status=Article.Status.PUBLISHED)
@@ -121,6 +134,23 @@ def article_comment(request, article_id):
     )
 
 
+@login_required
+def article_ranks(request):
+    article_ranks = r.zrange("article_ranks", 0, -1, desc=True)[:5]
+
+    article_ranks_ids = [int(id) for id in article_ranks]
+
+    most_read_news = list(Article.objects.filter(id__in=article_ranks_ids))
+    most_read_news.sort(key=lambda x: article_ranks_ids.index(x.id))
+
+    return render(
+        request,
+        "news/article/ranks.html",
+        {"most_read_news": most_read_news},
+    )
+
+
+@login_required
 def article_search(request):
     form = SearchForm()
     query = None

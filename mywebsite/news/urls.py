@@ -1,7 +1,13 @@
 from django.urls import path
 from . import views
+from django.contrib.sitemaps.views import sitemap
 from .feeds import LatestArticlesFeed
+from .sitemaps import ArticleSitemap
+from django.contrib.auth import views as auth_views
 
+sitemaps = {
+    "static": ArticleSitemap,
+}
 
 app_name = "news"
 urlpatterns = [
@@ -16,4 +22,13 @@ urlpatterns = [
     path("tag/<slug:tag_slug>", views.article_list, name="article_list_by_tag"),
     path("feed/", LatestArticlesFeed(), name="article_feed"),
     path("search/", views.article_search, name="article_search"),
+    path("ranks/", views.article_ranks, name="article_ranks"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    path("login/", auth_views.LoginView.as_view(), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout",),
 ]

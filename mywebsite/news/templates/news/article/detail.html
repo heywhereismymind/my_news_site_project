@@ -4,6 +4,11 @@
 {% block title %} {{ article.headline }} {% endblock %}
 {% block content %}
     <h1>{{ article.headline }}</h1>
+
+    <a class="btn btn-primary" href="#" role="button">
+    {{ total_views }} view{{ total_views|pluralize }}
+    </a>
+
     <p class="pdate">
         Published {{ article.publish }} by {{ article.reporter }}
     </p>

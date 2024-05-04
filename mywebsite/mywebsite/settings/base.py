@@ -15,12 +15,11 @@ import configparser
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+STATIC_ROOT = BASE_DIR / "static"
 
 conf = configparser.ConfigParser()
 conf.read(f"{BASE_DIR}/config.cfg")
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -29,18 +28,24 @@ conf.read(f"{BASE_DIR}/config.cfg")
 SECRET_KEY = "django-insecure-2)%l#re@q@f+e8_in*dufoqq2z)sayx_cn%&*0))s#p4ge&0n-"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = [
     "*",
 ]
 
+INTERNAL_IPS = ["127.0.0.1"]
+
+LOGIN_REDIRECT_URL = "news"
+LOGIN_URL = "news:login"
+LOGOUT_URL = "news:logout"
 
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "news.apps.NewsConfig",
     "django.contrib.auth",
+    "django.contrib.admin",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -50,8 +55,8 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     # InstalledApps
     "taggit",
-    # SelfApps
-    "news.apps.NewsConfig",
+    "debug_toolbar",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -62,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "mywebsite.urls"
@@ -84,33 +90,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mywebsite.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-PSQL_NAME = conf["postgre"]["NAME"]
-PSQL_USER = conf["postgre"]["USER"]
-PSQL_PASSWORD = conf["postgre"]["PASSWORD"]
-PSQL_HOST = conf["postgre"]["HOST"]
-PSQL_PORT = conf["postgre"]["PORT"]
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': PSQL_NAME,
-        'USER': PSQL_USER,
-        'PASSWORD': PSQL_PASSWORD,
-        'HOST': PSQL_HOST,
-        'PORT': PSQL_PORT,
-    }
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+    ]
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -130,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -142,7 +125,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -153,11 +135,14 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 EMAIL_HOST = conf["gmail"]["EMAIL_HOST"]
 EMAIL_PORT = conf["gmail"]["EMAIL_PORT"]
 EMAIL_HOST_USER = conf["gmail"]["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = conf["gmail"]["EMAIL_HOST_PASSWORD"]
 EMAIL_USE_TLS = conf["gmail"]["EMAIL_USE_TLS"]
+
+REDIS_HOST = conf["redis"]["REDIS_HOST"]
+REDIS_PORT = conf["redis"]["REDIS_PORT"]
+REDIS_DB = conf["redis"]["REDIS_DB"]
 
 SITE_ID = 1

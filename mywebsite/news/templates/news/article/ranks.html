@@ -1,0 +1,15 @@
+{% extends "news/base.html" %}
+
+{% block title %} Articles ranks {% endblock %}
+{% block content %}
+<h1>Articles ranks</h1>
+<ol>
+    {% for article in most_read_news %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">
+            {{ article.headline }}
+        </a>
+    </li>
+    {% endfor %}
+</ol>
+{% endblock %}
